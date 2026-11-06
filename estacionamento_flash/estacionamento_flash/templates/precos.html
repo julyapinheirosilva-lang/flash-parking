@@ -1,0 +1,6 @@
+{% extends "base.html" %}{% block title %}Preços | Flash Parking{% endblock %}{% block heading %}Tabela de preços{% endblock %}
+{% block content %}
+<div class="page-intro"><div><h2>Configuração de tarifas</h2><p>Defina os valores cobrados em cada modalidade.</p></div></div>
+<div class="panel form-panel"><h3>Valores do estacionamento</h3><form method="post" class="row g-3">{% for p in precos %}<div class="col-md-6"><label>{{ p.modalidade }} (R$)</label><div class="input-group"><span class="input-group-text">R$</span><input name="{{ p.modalidade }}" type="number" min="0" step="0.01" value="{{ '%.2f'|format(p.valor) }}" class="form-control" required></div></div>{% endfor %}<div class="col-12"><button class="btn btn-primary"><i class="bi bi-save me-2"></i>Salvar preços</button></div></form></div>
+<div class="notice"><i class="bi bi-info-circle"></i><span>O cálculo automático da saída utiliza a tarifa por hora. As modalidades diária, mensal e anual ficam cadastradas para consulta e evolução do sistema.</span></div>
+{% endblock %}

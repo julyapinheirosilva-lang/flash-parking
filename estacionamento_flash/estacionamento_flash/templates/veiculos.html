@@ -1,0 +1,19 @@
+{% extends "base.html" %}{% block title %}Veículos | Flash Parking{% endblock %}{% block heading %}Veículos{% endblock %}
+{% block content %}
+<div class="page-intro"><div><h2>Cadastro de veículos</h2><p>Associe cada veículo ao seu respectivo cliente.</p></div></div>
+<div class="panel form-panel"><h3>Novo veículo</h3>
+{% if clientes %}<form method="post" class="row g-3">
+<div class="col-md-3"><label>Placa *</label><input name="placa" class="form-control text-uppercase" placeholder="ABC1D23" maxlength="7" required></div>
+<div class="col-md-3"><label>Marca</label><input name="marca" class="form-control" placeholder="Ex.: Fiat"></div>
+<div class="col-md-3"><label>Modelo</label><input name="modelo" class="form-control" placeholder="Ex.: Argo"></div>
+<div class="col-md-3"><label>Cor</label><input name="cor" class="form-control"></div>
+<div class="col-md-2"><label>Ano</label><input name="ano" type="number" min="1900" max="2100" class="form-control"></div>
+<div class="col-md-3"><label>Tipo</label><select name="tipo" class="form-select"><option>Carro</option><option>Moto</option><option>Utilitário</option><option>Caminhonete</option><option>Van</option></select></div>
+<div class="col-md-3"><label>Tamanho</label><select name="tamanho" class="form-select"><option>Pequeno</option><option selected>Médio</option><option>Grande</option></select></div>
+<div class="col-md-4"><label>Proprietário *</label><select name="cliente_id" class="form-select" required><option value="">Selecione...</option>{% for c in clientes %}<option value="{{ c.id }}">{{ c.nome }}</option>{% endfor %}</select></div>
+<div class="col-12"><button class="btn btn-primary"><i class="bi bi-car-front me-2"></i>Cadastrar veículo</button></div></form>
+{% else %}<div class="empty-state">Cadastre um cliente antes de adicionar um veículo. <a href="{{ url_for('clientes') }}">Ir para clientes</a></div>{% endif %}
+</div>
+<div class="panel"><div class="panel-heading"><div><h3>Veículos cadastrados</h3><p>{{ veiculos|length }} registro(s)</p></div></div><div class="table-responsive"><table class="table dark-table"><thead><tr><th>PLACA</th><th>VEÍCULO</th><th>COR</th><th>TIPO</th><th>PROPRIETÁRIO</th><th></th></tr></thead><tbody>
+{% for v in veiculos %}<tr><td><span class="plate">{{ v.placa }}</span></td><td>{{ v.marca or '' }} {{ v.modelo or '' }} <small class="d-block muted">{{ v.ano or '' }}</small></td><td>{{ v.cor or '—' }}</td><td>{{ v.tipo }}</td><td>{{ v.cliente }}</td><td class="text-end"><form method="post" action="{{ url_for('excluir_veiculo',id=v.id) }}" onsubmit="return confirm('Excluir este veículo?')"><button class="icon-btn danger"><i class="bi bi-trash"></i></button></form></td></tr>{% else %}<tr><td colspan="6" class="empty">Nenhum veículo cadastrado.</td></tr>{% endfor %}
+</tbody></table></div></div>{% endblock %}

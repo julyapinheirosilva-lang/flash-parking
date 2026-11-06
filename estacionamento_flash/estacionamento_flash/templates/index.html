@@ -1,0 +1,23 @@
+{% extends "base.html" %}{% block title %}Painel | Flash Parking{% endblock %}{% block heading %}Visão geral{% endblock %}
+{% block content %}
+<div class="welcome-row"><div><h2>Bem-vindo ao Flash Parking</h2><p>Acompanhe a operação do estacionamento em tempo real.</p></div><a class="btn btn-primary" href="{{ url_for('movimentacoes') }}"><i class="bi bi-plus-lg me-2"></i>Registrar entrada</a></div>
+<div class="stats-grid">
+  <div class="stat-card"><div class="stat-top"><span>Total de vagas</span><i class="bi bi-p-square"></i></div><strong>{{ total }}</strong><small>Vagas cadastradas</small></div>
+  <div class="stat-card"><div class="stat-top"><span>Vagas livres</span><i class="bi bi-check-circle"></i></div><strong class="green">{{ livres }}</strong><small>Disponíveis agora</small></div>
+  <div class="stat-card"><div class="stat-top"><span>Vagas ocupadas</span><i class="bi bi-car-front"></i></div><strong class="orange">{{ ocupadas }}</strong><small>Em utilização</small></div>
+  <div class="stat-card"><div class="stat-top"><span>Faturamento hoje</span><i class="bi bi-wallet2"></i></div><strong>{{ faturamento|moeda }}</strong><small>Pagamentos registrados hoje</small></div>
+</div>
+<div class="two-col">
+ <div class="panel"><div class="panel-heading"><div><h3>Movimentações recentes</h3><p>Últimas entradas registradas</p></div><a href="{{ url_for('movimentacoes') }}">Ver todas <i class="bi bi-arrow-right"></i></a></div>
+  <div class="table-responsive"><table class="table dark-table"><thead><tr><th>PLACA</th><th>CLIENTE</th><th>VAGA</th><th>ENTRADA</th><th>STATUS</th></tr></thead><tbody>
+  {% for m in recentes %}<tr><td class="plate">{{ m.placa }}</td><td>{{ m.cliente }}</td><td>{{ m.vaga }}</td><td>{{ m.entrada[8:10] }}/{{ m.entrada[5:7] }} {{ m.entrada[11:16] }}</td><td><span class="status {{ 'status-open' if m.status=='Aberta' else 'status-done' }}">{{ m.status }}</span></td></tr>{% else %}<tr><td colspan="5" class="empty">Nenhuma movimentação registrada ainda.</td></tr>{% endfor %}
+  </tbody></table></div>
+ </div>
+ <div class="panel quick-panel"><div class="panel-heading"><div><h3>Resumo do sistema</h3><p>Cadastros realizados</p></div><i class="bi bi-activity heading-icon"></i></div>
+  <div class="quick-line"><span><i class="bi bi-people"></i> Clientes cadastrados</span><strong>{{ clientes }}</strong></div>
+  <div class="quick-line"><span><i class="bi bi-car-front"></i> Veículos cadastrados</span><strong>{{ veiculos }}</strong></div>
+  <div class="quick-line"><span><i class="bi bi-p-square"></i> Ocupação</span><strong>{{ ((ocupadas / total * 100)|round|int) if total else 0 }}%</strong></div>
+  <div class="occupancy"><span style="width:{{ ((ocupadas / total * 100) if total else 0) }}%"></span></div>
+  <a href="{{ url_for('relatorios') }}" class="btn btn-outline-secondary w-100 mt-4">Acessar relatórios</a>
+ </div>
+</div>{% endblock %}
